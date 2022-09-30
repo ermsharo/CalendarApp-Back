@@ -7,10 +7,6 @@ const reminders = database.define("LOCATIONS", {
     allowNull: false,
     primaryKey: true,
   },
-  state_name: {
-    type: Sequelize.TEXT,
-    allowNull: false,
-  },
   city_name: {
     type: Sequelize.TEXT,
     allowNull: false,

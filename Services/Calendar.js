@@ -3,6 +3,32 @@ const crypto = require("crypto");
 
 module.exports = class Calendar {
 
+ 
+
+
+    verifyIsToday(day, month, year) {
+
+    }
+
+
+    getDayOfWeek(day, month, year) {
+        const d = new Date(`${month}-${day}-${year}`);
+        let day = d.getDay()
+        return day;
+    }
+
+    verifyIsWeekend(day, month, year) {
+
+
+        if (this.getDayOfWeek(day, month, year) === 0 ||
+            this.getDayOfWeek(day, month, year) === 6) return true;
+
+    }
+
+
+
+
+
 
     async getReminderByDate(date) {
         //get all reminders of this date in or db
@@ -86,6 +112,7 @@ module.exports = class Calendar {
         const ourData = [];
         let formatString;
         let eventsOfDay;
+        let isWeekend;
         for (let i = 0; i < 42; i++) {
             if (i < firstDayIndex || i > numberOfDays + firstDayIndex - 1) {
                 ourData.push({
@@ -95,13 +122,17 @@ module.exports = class Calendar {
 
                 formatString = this.formatMonthString(j, month, year);
                 eventsOfDay = await this.getReminderByDate(formatString);
+                isWeekend = this.isWeekend(j, month, year);
                 ourData.push({
                     isValideDay: true,
                     day: j,
                     month: month,
                     year: year,
                     date: formatString,
-                    eventsOfDay: eventsOfDay
+                    eventsOfDay: eventsOfDay,
+                    isToday: false,
+                    idWeekend: isWeekend,
+
                 });
                 j++;
             }

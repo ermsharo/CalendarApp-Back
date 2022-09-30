@@ -1,7 +1,7 @@
-
+const Locations = require("../models/Locations");
 
 module.exports = class Locations {
-    
+
     constructor() {
 
     }
@@ -12,7 +12,20 @@ module.exports = class Locations {
 
     }
 
-    
+    async insertCitiesInDB(id, city, lat, long) {
+
+        const [row, created] = await Locations.findOrCreate({
+            where: {
+                id: id,
+                city_name:city,
+                lat: lat,
+                long: long,
+            },
+        });
+
+    }
+
+
 
 
 }
