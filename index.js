@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
-// const authRoutes = require("./routes/auth");
+const Reminders = require("./routes/reminders");
+const Month = require("./routes/month");
 // const entriesRoutes = require("./routes/entries");
 // const userRoutes = require("./routes/user");
 // const freeDict  = require("./routes/freeDict");
@@ -18,11 +19,7 @@ const app = express();
 const port = process.env.PORT;
 app.use(jsonParser);
 app.use(cors());
-app.get("/", (req, res) => {
-    res.send({
-        message: "Fullstack Challenge 🏅 - Dictionary",
-    });
-});
+
 
 //Database connection
 
@@ -35,7 +32,8 @@ db.authenticate()
     });
 
 //Routes
-// app.use(authRoutes);
+app.use(Reminders);
+app.use(Month);
 // app.use(entriesRoutes);
 // app.use(userRoutes);
 // app.use(freeDict);
