@@ -2,109 +2,141 @@ const Reminders = require("../models/Reminders");
 const crypto = require("crypto");
 
 module.exports = class Calendar {
-  verifyMonthRequest() {}
 
-  getMonthString(monthIndex) {
-    let monthsOfYear = [
-      "janeiro",
-      "fevereiro",
-      "março",
-      "abril",
-      "maio",
-      "junho",
-      "julho",
-      "agosto",
-      "setembro",
-      "outubro",
-      "novembro",
-      "dezembro",
-    ];
-    return monthsOfYear[monthIndex - 1];
-  }
 
-  updateOurStates(referenceMonth, referenceYear) {
-    const firstDayOfMonth = new Date(referenceMonth, referenceMonth, 1);
+    async getReminderByDate(date) {
+        //get all reminders of this date in or db
+        //The date come on this format dd-mm-yyyy
+        console.log("Chamando aqui", date)
+        const { count, rows } = await Reminders.findAndCountAll({
+            where: {
+                date: date,
+            }
+        })
+        console.log("rows", rows)
 
-    const daysInMonth = new Date(referenceYear, referenceYear + 1, 0).getDate();
+        if (count > 0) return {
+            'reminders': rows,
+            'count': count
+        };
+        return false;
 
-    const dateString = firstDayOfMonth.toLocaleDateString("en-us", {
-      weekday: "long",
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-    });
-
-    const weekdays = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
-
-    const paddingDays = weekdays.indexOf(dateString.split(", ")[0]);
-
-    return {
-      paddingDays: paddingDays,
-      daysInMonth: daysInMonth,
-    };
-  }
-
-  getMonthData(year, month) {
-    //this function create the structure used in frontend to cretate the calendar
-    let monthInfo = this.updateOurStates(year, month);
-    console.log(monthInfo);
-    let numberOfDays = monthInfo.daysInMonth;
-    let firstDayIndex = monthInfo.paddingDays;
-    let j = 1;
-    const ourData = [];
-    for (let i = 0; i < 42; i++) {
-      if (i < firstDayIndex || i > numberOfDays + firstDayIndex - 1) {
-        ourData.push({
-          isValideDay: false,
-        });
-      } else {
-        ourData.push({
-          isValideDay: true,
-          day: j,
-          month: 1,
-          year: 1,
-          date: null,
-          eventsOfDay: [],
-        });
-        j++;
-      }
     }
-    return ourData;
-  }
 
-  async addNewReminder(title, description, color, start, end, date) {
-    //Add a new reminder
+    formatMonthString(day, month, year) {
+        return `${("0" + day).slice(-2)}-${("0" + month).slice(-2)}-${year}`
+    }
 
-    const id = crypto.randomBytes(20).toString("hex");
-    console.log("id ->", id);
-    // const [row, created] = await Reminders.findOrCreate({
-    //     where: {
-    //         word: word,
-    //         user_id: userId,
-    //         word_id: wordId,
-    //     },
-    // });
-  }
+    verifyMonthRequest() { }
 
-  async deleteReminder() {
-    //delete a reminder
-    let remove = await favoritesLog.destroy({
-      where: {
-        word: word,
-        user_id: user_id,
-      },
-    });
-  }
+    getMonthString(monthIndex) {
+        let monthsOfYear = [
+            "janeiro",
+            "fevereiro",
+            "março",
+            "abril",
+            "maio",
+            "junho",
+            "julho",
+            "agosto",
+            "setembro",
+            "outubro",
+            "novembro",
+            "dezembro",
+        ];
+        return monthsOfYear[monthIndex - 1];
+    }
 
-  getHolydaysMonth() {
-    //Acess a api with the brazilian holidays of a date and return a status
-  }
+    updateOurStates(referenceMonth, referenceYear) {
+        const firstDayOfMonth = new Date(referenceMonth, referenceMonth, 1);
+
+        const daysInMonth = new Date(referenceYear, referenceYear + 1, 0).getDate();
+
+        const dateString = firstDayOfMonth.toLocaleDateString("en-us", {
+            weekday: "long",
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+        });
+
+        const weekdays = [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+        ];
+
+        const paddingDays = weekdays.indexOf(dateString.split(", ")[0]);
+
+        return {
+            paddingDays: paddingDays,
+            daysInMonth: daysInMonth,
+        };
+    }
+
+    async getMonthData(year, month) {
+        //this function create the structure used in frontend to cretate the calendar
+        let monthInfo = this.updateOurStates(year, month);
+        let numberOfDays = monthInfo.daysInMonth;
+        let firstDayIndex = monthInfo.paddingDays;
+        let j = 1;
+        const ourData = [];
+        let formatString;
+        let eventsOfDay;
+        for (let i = 0; i < 42; i++) {
+            if (i < firstDayIndex || i > numberOfDays + firstDayIndex - 1) {
+                ourData.push({
+                    isValideDay: false,
+                });
+            } else {
+
+                formatString = this.formatMonthString(j, month, year);
+                eventsOfDay = await this.getReminderByDate(formatString);
+                ourData.push({
+                    isValideDay: true,
+                    day: j,
+                    month: month,
+                    year: year,
+                    date: formatString,
+                    eventsOfDay: eventsOfDay
+                });
+                j++;
+            }
+        }
+        return ourData;
+    }
+
+
+
+
+    async addNewReminder(title, description, color, start, end, date) {
+        //Add a new reminder
+
+        const id = crypto.randomBytes(20).toString("hex");
+        const [row, created] = await Reminders.findOrCreate({
+            where: {
+                id: id,
+                user_id: "GENERIC_USE_ID",
+                title: title,
+                description: description,
+                color: color,
+                date: date,
+                start: start,
+                end: end,
+            },
+        });
+    }
+
+    async deleteReminder(id) {
+        //delete a reminder
+        await Reminders.destroy({
+            where: {
+                id: id
+            },
+        });
+    }
+
 };

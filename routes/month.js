@@ -10,8 +10,9 @@ router.get("/calendar/", async (req, res) => {
   //  const month = req.params.month;
 
   //  const year = req.params.year;
+  let days = await cal.getMonthData(year, month);
   return res.status(200).json({
-    days: cal.getMonthData(year, month),
+    days: days,
     month: cal.getMonthString(month),
     year: year,
   });

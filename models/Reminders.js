@@ -27,6 +27,10 @@ const reminders = database.define("REMINDERS", {
     type: Sequelize.TEXT,
     allowNull: false,
   },
+  date: {
+    type: Sequelize.TEXT,
+    allowNull: false,
+  },
   color: {
     type: Sequelize.TEXT,
     allowNull: false,
