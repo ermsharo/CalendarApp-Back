@@ -10,7 +10,6 @@ const reminders = database.define("REMINDERS", {
   user_id: {
     type: Sequelize.TEXT,
     allowNull: false,
-
   },
   title: {
     type: Sequelize.TEXT,
