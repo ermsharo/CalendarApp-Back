@@ -2,9 +2,8 @@ const express = require("express");
 const dotenv = require("dotenv");
 const Reminders = require("./routes/reminders");
 const Month = require("./routes/month");
-// const entriesRoutes = require("./routes/entries");
-// const userRoutes = require("./routes/user");
-// const freeDict  = require("./routes/freeDict");
+const Locations = require("./routes/locations")
+
 
 const db = require("./database/connection");
 const cors = require("cors");
@@ -34,9 +33,12 @@ db.authenticate()
 //Routes
 app.use(Reminders);
 app.use(Month);
+app.use(Locations)
 // app.use(entriesRoutes);
 // app.use(userRoutes);
 // app.use(freeDict);
+
+
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);

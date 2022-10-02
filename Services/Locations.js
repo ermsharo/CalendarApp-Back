@@ -1,4 +1,4 @@
-const Locations = require("../models/Locations");
+const locations = require("../models/Locations");
 
 module.exports = class Locations {
 
@@ -6,18 +6,19 @@ module.exports = class Locations {
 
     }
 
-
-    getCitiesListByFederation(federation) {
-        //this function get a federation and return all yours cities info
+    async getCitiesList() {
+        //this  return all brazilian cities  name info
+        const { count, rows } = await locations.findAndCountAll({ attributes: ['id', 'city_name'] });
 
     }
 
-    async insertCitiesInDB(id, city, lat, long) {
+    async insertCityInDB(id, city, lat, long) {
 
-        const [row, created] = await Locations.findOrCreate({
+
+        const [row, created] = await locations.findOrCreate({
             where: {
                 id: id,
-                city_name:city,
+                city_name: city,
                 lat: lat,
                 long: long,
             },
