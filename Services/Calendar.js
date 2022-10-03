@@ -18,6 +18,8 @@ module.exports = class Calendar {
       return true;
   }
 
+  updateOurReminder(newContent) {}
+
   async getReminderByDate(date) {
     //get all reminders of this date in or db
     //The date come on this format dd-mm-yyyy

@@ -1,18 +1,7 @@
-
-
 module.exports = class Climate {
+  constructor() {}
 
-    constructor() {
-
-    }
-
-
-    getClimateOfReminder(lat, long, day , year) {
-        //this function get a federation and return all yours cities info
-
-    }
-
-
-
-
-}
+  getClimateOfReminder(lat, long, day, year) {
+    //this function get a federation and return all yours cities info
+  }
+};

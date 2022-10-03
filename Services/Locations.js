@@ -1,32 +1,23 @@
 const locations = require("../models/Locations");
 
 module.exports = class Locations {
+  constructor() {}
 
-    constructor() {
+  async getCitiesList() {
+    //this  return all brazilian cities  name info
+    const { count, rows } = await locations.findAndCountAll({
+      attributes: ["id", "city_name"],
+    });
+  }
 
-    }
-
-    async getCitiesList() {
-        //this  return all brazilian cities  name info
-        const { count, rows } = await locations.findAndCountAll({ attributes: ['id', 'city_name'] });
-
-    }
-
-    async insertCityInDB(id, city, lat, long) {
-
-
-        const [row, created] = await locations.findOrCreate({
-            where: {
-                id: id,
-                city_name: city,
-                lat: lat,
-                long: long,
-            },
-        });
-
-    }
-
-
-
-
-}
+  async insertCityInDB(id, city, lat, long) {
+    const [row, created] = await locations.findOrCreate({
+      where: {
+        id: id,
+        city_name: city,
+        lat: lat,
+        long: long,
+      },
+    });
+  }
+};

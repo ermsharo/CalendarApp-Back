@@ -17,4 +17,10 @@ router.delete("/reminders", async (req, res) => {
   return res.status(200);
 });
 
+router.put("/reminders", async (req, res) => {
+  const { title, description, color, start, end, date } = req.body;
+  console.log("->", title, description, color, start, end, date);
+  return res.status(200);
+});
+
 module.exports = router;
