@@ -8,7 +8,6 @@ const router = express.Router();
 router.get("/locations", async (req, res) => {
 
   let cities = await loc.getCitiesList();
-  console.log("locations from here")
   return res.status(200).json({ "locations": cities });
 });
 

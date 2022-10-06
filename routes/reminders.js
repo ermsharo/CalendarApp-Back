@@ -18,8 +18,7 @@ router.delete("/reminders", async (req, res) => {
 });
 
 router.put("/reminders", async (req, res) => {
-  const { title, description, color, start, end, date } = req.body;
-  console.log("->", title, description, color, start, end, date);
+  cal.editReminder(req.query.id, req.body);
   return res.status(200);
 });
 

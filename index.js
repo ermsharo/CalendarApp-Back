@@ -31,9 +31,6 @@ db.authenticate()
 app.use(Reminders);
 app.use(Month);
 app.use(Locations);
-// app.use(entriesRoutes);
-// app.use(userRoutes);
-// app.use(freeDict);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

@@ -6,8 +6,9 @@ module.exports = class Locations {
   async getCitiesList() {
     //this  return all brazilian cities  name info
     const { count, rows } = await locations.findAndCountAll({
-      attributes: ["id", "city_name"],
+      attributes: ["city_name"],
     });
+    return rows;
   }
 
   async insertCityInDB(id, city, lat, long) {
